@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [abuu](https://up.htmlacademy.ru/ecmascript/11/user/895015).
-* Наставник: `Неизвестно`.
+* Наставник: [Дмитрий Мирошниченко](https://up.htmlacademy.ru/ecmascript/11/user/591417).
 
 ---
 
