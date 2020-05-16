@@ -36,4 +36,8 @@ const formatTime = (date, format) => {
   return formattedDate;
 };
 
-export {getRandomIntegerNumber, getRandomArrayItem, formatTime};
+const render = (container, template, place = `beforeend`) => {
+  return container.insertAdjacentHTML(place, template);
+};
+
+export {getRandomIntegerNumber, getRandomArrayItem, formatTime, render};

@@ -5,14 +5,11 @@ import {createShowMoreButtonTemplate} from './components/show-more-button';
 import {createFilmDetailsTemplate} from './components/film-details';
 import {generateFilms} from './mock/film';
 import {ESC_KEY} from './const';
+import {render} from './utils';
 
 const FILMS_COUNT = 19;
 const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
-
-const render = (container, template, place = `beforeend`) => {
-  return container.insertAdjacentHTML(place, template);
-};
 
 const removeFilmDetails = () => {
   const filmDetails = document.body.querySelector(`.film-details`);
@@ -64,7 +61,7 @@ const updateFilters = (filterValues) => {
 
 const films = generateFilms(FILMS_COUNT);
 let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
-let showingFilmsOnStart = films.slice(0, showingFilmsCount);
+let showingFilmsOnStart = films.slice(0, SHOWING_FILMS_COUNT_ON_START);
 
 const siteHeaderElement = document.querySelector(`.header`);
 render(siteHeaderElement, createUserRatingTemplate());

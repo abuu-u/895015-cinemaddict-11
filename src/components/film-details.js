@@ -35,23 +35,9 @@ const createFilmDetailsTemplate = (film) => {
     userDetails,
   } = film;
   const {
-    title,
-    alternativeTitle,
-    totalRating,
-    poster,
-    ageRating,
-    director,
-    writers,
-    actors,
-    release,
-    runtime,
-    genre,
-    description,
-  } = info;
-  const {
     date,
     country,
-  } = release;
+  } = info.release;
   const {
     watchlist,
     alreadyWatched,
@@ -59,7 +45,7 @@ const createFilmDetailsTemplate = (film) => {
   } = userDetails;
 
   return (
-    `<section class="film-details">
+    `<section class="film-details" style="display: none">
       <form class="film-details__inner" action="" method="get">
         <div class="form-details__top-container">
           <div class="film-details__close">
@@ -67,35 +53,35 @@ const createFilmDetailsTemplate = (film) => {
           </div>
           <div class="film-details__info-wrap">
             <div class="film-details__poster">
-              <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+              <img class="film-details__poster-img" src="./images/posters/${info.poster}" alt="">
 
-              <p class="film-details__age">${ageRating}+</p>
+              <p class="film-details__age">${info.ageRating}+</p>
             </div>
 
             <div class="film-details__info">
               <div class="film-details__info-head">
                 <div class="film-details__title-wrap">
-                  <h3 class="film-details__title">${title}</h3>
-                  <p class="film-details__title-original">Original:${alternativeTitle}</p>
+                  <h3 class="film-details__title">${info.title}</h3>
+                  <p class="film-details__title-original">Original:${info.alternativeTitle}</p>
                 </div>
 
                 <div class="film-details__rating">
-                  <p class="film-details__total-rating">${totalRating}</p>
+                  <p class="film-details__total-rating">${info.totalRating}</p>
                 </div>
               </div>
 
               <table class="film-details__table">
                 <tr class="film-details__row">
                   <td class="film-details__term">Director</td>
-                  <td class="film-details__cell">${director}</td>
+                  <td class="film-details__cell">${info.director}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Writers</td>
-                  <td class="film-details__cell">${writers.join(`, `)}</td>
+                  <td class="film-details__cell">${info.writers.join(`, `)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Actors</td>
-                  <td class="film-details__cell">${actors.join(`, `)}</td>
+                  <td class="film-details__cell">${info.actors.join(`, `)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
@@ -103,22 +89,22 @@ const createFilmDetailsTemplate = (film) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${Math.floor(runtime / 60)}h ${runtime % 60}m</td>
+                  <td class="film-details__cell">${Math.floor(info.runtime / 60)}h ${info.runtime % 60}m</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
                   <td class="film-details__cell">${country}</td>
                 </tr>
                 <tr class="film-details__row">
-                  <td class="film-details__term">Genre${genre.length > 1 ? `s` : ``}</td>
+                  <td class="film-details__term">Genre${info.genre.length > 1 ? `s` : ``}</td>
                   <td class="film-details__cell">
-                    ${genre.join(` `)}
+                    ${info.genre.join(` `)}
                   </td>
                 </tr>
               </table>
 
               <p class="film-details__film-description">
-                ${description}
+                ${info.description}
               </p>
             </div>
           </div>
