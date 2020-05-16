@@ -6,7 +6,7 @@ const watchedFilmsCount = {
   get() {
     return getRandomIntegerNumber(this.min, this.max);
   },
-}
+};
 
 const generateWatchedFilms = () => {
   return watchedFilmsCount.get();
