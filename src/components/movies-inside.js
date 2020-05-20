@@ -1,9 +1,5 @@
 import {createElement} from "../utils";
 
-const createMoviesInsideTemplate = (moviesInside) => {
-  return `<p>${moviesInside} movies inside</p>`;
-};
-
 export default class MoviesInside {
   constructor(moviesInside) {
     this._moviesInside = moviesInside;
@@ -12,7 +8,7 @@ export default class MoviesInside {
   }
 
   getTemplate() {
-    return createMoviesInsideTemplate(this._moviesInside);
+    return `<p>${this._moviesInside} movies inside</p>`;
   }
 
   getElement() {

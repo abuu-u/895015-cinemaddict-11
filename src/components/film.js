@@ -4,28 +4,35 @@ const DESCRIPTION_MAX = 140;
 const ELLIPSIS_CHAR = `…`;
 const ACTIVE_CLASS = `film-card__controls-item--active`;
 
-const createFilmTemplate = (film) => {
-  const {
-    comments,
-    info,
-    userDetails,
-  } = film;
-  const {
-    watchlist,
-    alreadyWatched,
-    favorite,
-  } = userDetails;
+export default class Film {
+  constructor(film) {
+    this._film = film;
 
-  const runtimeHours = Math.floor(info.runtime / 60);
-  const runtimeMinutes = info.runtime % 60;
-  const description = info.description.length > 140 ? info.description.slice(0, DESCRIPTION_MAX) + ELLIPSIS_CHAR : info.description;
-  const releaseYear = new Date(info.release.date).getFullYear();
-  const watchlistActiveClass = watchlist ? ACTIVE_CLASS : ``;
-  const alreadyWatchedActiveClass = alreadyWatched ? ACTIVE_CLASS : ``;
-  const favoriteActiveClass = favorite ? ACTIVE_CLASS : ``;
+    this._element = null;
+  }
 
-  return (
-    `<article class="film-card">
+  getTemplate() {
+    const {
+      comments,
+      info,
+      userDetails,
+    } = this._film;
+    const {
+      watchlist,
+      alreadyWatched,
+      favorite,
+    } = userDetails;
+
+    const runtimeHours = Math.floor(info.runtime / 60);
+    const runtimeMinutes = info.runtime % 60;
+    const description = info.description.length > 140 ? info.description.slice(0, DESCRIPTION_MAX) + ELLIPSIS_CHAR : info.description;
+    const releaseYear = new Date(info.release.date).getFullYear();
+    const watchlistActiveClass = watchlist ? ACTIVE_CLASS : ``;
+    const alreadyWatchedActiveClass = alreadyWatched ? ACTIVE_CLASS : ``;
+    const favoriteActiveClass = favorite ? ACTIVE_CLASS : ``;
+
+    return (
+      `<article class="film-card">
       <h3 class="film-card__title">${info.title}</h3>
       <p class="film-card__rating">${info.totalRating}</p>
       <p class="film-card__info">
@@ -42,18 +49,7 @@ const createFilmTemplate = (film) => {
         <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteActiveClass}">Mark as favorite</button>
       </form>
     </article>`
-  );
-};
-
-export default class Film {
-  constructor(film) {
-    this._film = film;
-
-    this._element = null;
-  }
-
-  getTemplate() {
-    return createFilmTemplate(this._film);
+    );
   }
 
   getElement() {

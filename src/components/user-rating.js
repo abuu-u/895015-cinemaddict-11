@@ -1,5 +1,4 @@
 import {createElement} from "../utils";
-import {generateWatchedFilms} from "../mock/user-rating";
 
 const USER_RATINGS = [
   `novice`,
@@ -11,26 +10,22 @@ const getUserRating = (watchedFilms) => {
   return watchedFilms ? USER_RATINGS[Math.floor(watchedFilms / 10)] : ``;
 };
 
-const createUserRatingTemplate = () => {
-  const rating = getUserRating(generateWatchedFilms());
-
-  return (
-    `<section class="header__profile profile">
-      <p class="profile__rating">${rating}</p>
-      <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-    </section>`
-  );
-};
-
 export default class UserRating {
-  constructor(userRating) {
-    this._userRating = userRating;
+  constructor(watchedFilms) {
+    this._watchedFilms = watchedFilms;
 
     this._element = null;
   }
 
   getTemplate() {
-    return createUserRatingTemplate(this._userRating);
+    const rating = getUserRating(this._watchedFilms);
+
+    return (
+      `<section class="header__profile profile">
+      <p class="profile__rating">${rating}</p>
+      <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
+    </section>`
+    );
   }
 
   getElement() {

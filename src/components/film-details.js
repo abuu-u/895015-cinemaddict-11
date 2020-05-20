@@ -29,31 +29,38 @@ const createComments = (comment) => {
   );
 };
 
-const createFilmDetailsTemplate = (film) => {
-  const {
-    info,
-    userDetails,
-  } = film;
-  const {
-    country,
-  } = info.release;
-  const {
-    watchlist,
-    alreadyWatched,
-    favorite,
-  } = userDetails;
+export default class FilmDetails {
+  constructor(film) {
+    this._film = film;
 
-  const date = formatTime(new Date(info.release.date), releaseDateFormat);
-  const runtimeHours = Math.floor(info.runtime / 60);
-  const runtimeMinutes = info.runtime % 60;
-  const genre = info.genre.length > 1 ? `s` : ``;
-  const watchlistChecked = watchlist ? `checked` : ``;
-  const alreadyWatchedChecked = alreadyWatched ? `checked` : ``;
-  const favoriteChecked = favorite ? `checked` : ``;
-  const comments = film.comments.map(createComments).join(``);
+    this._element = null;
+  }
 
-  return (
-    `<section class="film-details">
+  getTemplate() {
+    const {
+      info,
+      userDetails,
+    } = this._film;
+    const {
+      country,
+    } = info.release;
+    const {
+      watchlist,
+      alreadyWatched,
+      favorite,
+    } = userDetails;
+
+    const date = formatTime(new Date(info.release.date), releaseDateFormat);
+    const runtimeHours = Math.floor(info.runtime / 60);
+    const runtimeMinutes = info.runtime % 60;
+    const genre = info.genre.length > 1 ? `s` : ``;
+    const watchlistChecked = watchlist ? `checked` : ``;
+    const alreadyWatchedChecked = alreadyWatched ? `checked` : ``;
+    const favoriteChecked = favorite ? `checked` : ``;
+    const comments = this._film.comments.map(createComments);
+
+    return (
+      `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
         <div class="form-details__top-container">
           <div class="film-details__close">
@@ -137,7 +144,7 @@ const createFilmDetailsTemplate = (film) => {
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
             <ul class="film-details__comments-list">
-            ${comments}
+            ${comments.join(``)}
             </ul>
 
             <div class="film-details__new-comment">
@@ -173,18 +180,7 @@ const createFilmDetailsTemplate = (film) => {
         </div>
       </form>
     </section>`
-  );
-};
-
-export default class FilmDetails {
-  constructor(filmDetails) {
-    this._filmDetails = filmDetails;
-
-    this._element = null;
-  }
-
-  getTemplate() {
-    return createFilmDetailsTemplate(this._filmDetails);
+    );
   }
 
   getElement() {

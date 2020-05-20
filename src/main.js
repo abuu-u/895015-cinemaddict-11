@@ -6,6 +6,7 @@ import FilmComponent from './components/film';
 import ShowMoreButtonComponent from './components/show-more-button';
 import FilmDetailsComponent from './components/film-details';
 import {generateFilms} from './mock/film';
+import {generateWatchedFilms} from './mock/user-rating';
 import {ESC_KEY} from './const';
 import {render} from './utils';
 
@@ -43,7 +44,7 @@ const renderFilm = (filmsListContainerElement, film) => {
     }
   };
 
-  render(filmsListContainerElement, filmElement);
+  render(filmsListContainerElement, filmComponent);
 
   filmElement.querySelector(`.film-card__title`).addEventListener(`click`, renderFilmDetails);
   filmElement.querySelector(`.film-card__poster`).addEventListener(`click`, renderFilmDetails);
@@ -84,17 +85,17 @@ const films = generateFilms(FILMS_COUNT);
 let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
 let showingFilmsOnStart = films.slice(0, SHOWING_FILMS_COUNT_ON_START);
 
-render(siteHeaderElement, new UserRatingComponent().getElement());
+render(siteHeaderElement, new UserRatingComponent(generateWatchedFilms()));
 
 const filtersComponent = new FiltersComponent(getFiltersValues(showingFilmsOnStart));
 const filtersElement = filtersComponent.getElement();
-render(siteMainElement, filtersElement);
+render(siteMainElement, filtersComponent);
 
-render(siteMainElement, new SortComponent().getElement());
+render(siteMainElement, new SortComponent());
 
 const filmsContainerComponent = new FilmsContainerComponent();
 const filmsContainerElement = filmsContainerComponent.getElement();
-render(siteMainElement, filmsContainerElement);
+render(siteMainElement, filmsContainerComponent);
 const filmsListElement = filmsContainerElement.querySelector(`.films-list`);
 const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
 
@@ -103,7 +104,7 @@ showingFilmsOnStart
 
 const showMoreButtonComponent = new ShowMoreButtonComponent();
 const showMoreButtonElement = showMoreButtonComponent.getElement();
-render(filmsListElement, showMoreButtonElement);
+render(filmsListElement, showMoreButtonComponent);
 
 showMoreButtonElement.addEventListener(`click`, () => {
   const prevTasksCount = showingFilmsCount;
