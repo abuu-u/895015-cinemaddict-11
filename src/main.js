@@ -25,10 +25,12 @@ const renderFilm = (filmsListContainerElement, film) => {
 
   const renderFilmDetails = () => {
     document.body.appendChild(filmDetailsElement);
+    document.addEventListener(`keydown`, onFilmDetailsPressEsc);
   };
 
   const removeFilmDetails = () => {
     document.body.removeChild(filmDetailsElement);
+    document.removeEventListener(`keydown`, onFilmDetailsPressEsc);
   };
 
   const onFilmDetailsCloseClick = () => {
@@ -36,10 +38,8 @@ const renderFilm = (filmsListContainerElement, film) => {
   };
 
   const onFilmDetailsPressEsc = (evt) => {
-    if (document.body.querySelector(`.film-details`)) {
-      if (evt.key === ESC_KEY) {
-        removeFilmDetails();
-      }
+    if (evt.key === ESC_KEY) {
+      removeFilmDetails();
     }
   };
 
@@ -50,7 +50,6 @@ const renderFilm = (filmsListContainerElement, film) => {
   filmElement.querySelector(`.film-card__comments`).addEventListener(`click`, renderFilmDetails);
 
   filmDetailsElement.querySelector(`.film-details__close-btn`).addEventListener(`click`, onFilmDetailsCloseClick);
-  document.addEventListener(`keydown`, onFilmDetailsPressEsc);
 };
 
 const getFiltersValues = (films) => {
