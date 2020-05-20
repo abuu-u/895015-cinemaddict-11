@@ -1,4 +1,4 @@
-import {formatTime} from '../utils';
+import {formatTime, createElement} from '../utils';
 
 const commentDateFormat = `YYYY/MM/DD HH:mm`;
 const releaseDateFormat = `DD MMMM YYYY`;
@@ -7,9 +7,10 @@ const createComments = (comment) => {
   const {
     author,
     text,
-    date,
     emotion,
   } = comment;
+
+  const date = formatTime(new Date(comment.date), commentDateFormat);
 
   return (
     `<li class="film-details__comment">
@@ -20,7 +21,7 @@ const createComments = (comment) => {
         <p class="film-details__comment-text">${text}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${formatTime(new Date(date), commentDateFormat)}</span>
+          <span class="film-details__comment-day">${date}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
@@ -30,12 +31,10 @@ const createComments = (comment) => {
 
 const createFilmDetailsTemplate = (film) => {
   const {
-    comments,
     info,
     userDetails,
   } = film;
   const {
-    date,
     country,
   } = info.release;
   const {
@@ -44,8 +43,17 @@ const createFilmDetailsTemplate = (film) => {
     favorite,
   } = userDetails;
 
+  const date = formatTime(new Date(info.release.date), releaseDateFormat);
+  const runtimeHours = Math.floor(info.runtime / 60);
+  const runtimeMinutes = info.runtime % 60;
+  const genre = info.genre.length > 1 ? `s` : ``;
+  const watchlistChecked = watchlist ? `checked` : ``;
+  const alreadyWatchedChecked = alreadyWatched ? `checked` : ``;
+  const favoriteChecked = favorite ? `checked` : ``;
+  const comments = film.comments.map(createComments).join(``);
+
   return (
-    `<section class="film-details" style="display: none">
+    `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
         <div class="form-details__top-container">
           <div class="film-details__close">
@@ -85,18 +93,18 @@ const createFilmDetailsTemplate = (film) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${formatTime(new Date(date), releaseDateFormat)}</td>
+                  <td class="film-details__cell">${date}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${Math.floor(info.runtime / 60)}h ${info.runtime % 60}m</td>
+                  <td class="film-details__cell">${runtimeHours}h ${runtimeMinutes}m</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
                   <td class="film-details__cell">${country}</td>
                 </tr>
                 <tr class="film-details__row">
-                  <td class="film-details__term">Genre${info.genre.length > 1 ? `s` : ``}</td>
+                  <td class="film-details__term">Genre${genre}</td>
                   <td class="film-details__cell">
                     ${info.genre.join(` `)}
                   </td>
@@ -110,13 +118,16 @@ const createFilmDetailsTemplate = (film) => {
           </div>
 
           <section class="film-details__controls">
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlist ? `checked` : ``}>
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist"
+                    name="watchlist" ${watchlistChecked}>
             <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${alreadyWatched ? `checked` : ``}>
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="watched"
+                    name="watched" ${alreadyWatchedChecked}>
             <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favorite ? `checked` : ``}>
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite"
+                    name="favorite" ${favoriteChecked}>
             <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
           </section>
         </div>
@@ -126,7 +137,7 @@ const createFilmDetailsTemplate = (film) => {
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
             <ul class="film-details__comments-list">
-            ${comments.map(createComments).join(``)}
+            ${comments}
             </ul>
 
             <div class="film-details__new-comment">
@@ -165,4 +176,26 @@ const createFilmDetailsTemplate = (film) => {
   );
 };
 
-export {createFilmDetailsTemplate};
+export default class FilmDetails {
+  constructor(filmDetails) {
+    this._filmDetails = filmDetails;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._filmDetails);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

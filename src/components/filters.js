@@ -1,9 +1,12 @@
-const createMenuTemplate = (filterValues) => {
+
+import {createElement} from "../utils";
+
+const createFiltersTemplate = (filtersValues) => {
   const {
     watchlist,
     alreadyWatched,
     favorite,
-  } = filterValues;
+  } = filtersValues;
 
   return (
     `<nav class="main-navigation">
@@ -14,23 +17,30 @@ const createMenuTemplate = (filterValues) => {
         <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">${favorite}</span></a>
       </div>
       <a href="#stats" class="main-navigation__additional">Stats</a>
-    </nav>
-
-    <ul class="sort">
-      <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
-      <li><a href="#" class="sort__button">Sort by date</a></li>
-      <li><a href="#" class="sort__button">Sort by rating</a></li>
-    </ul>
-
-    <section class="films">
-      <section class="films-list">
-        <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
-
-        <div class="films-list__container">
-        </div>
-      </section>
-    </section>`
+    </nav>`
   );
 };
 
-export {createMenuTemplate};
+export default class Filters {
+  constructor(filters) {
+    this._filters = filters;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFiltersTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

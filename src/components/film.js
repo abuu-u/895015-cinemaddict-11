@@ -1,5 +1,8 @@
+import {createElement} from "../utils";
+
 const DESCRIPTION_MAX = 140;
 const ELLIPSIS_CHAR = `…`;
+const ACTIVE_CLASS = `film-card__controls-item--active`;
 
 const createFilmTemplate = (film) => {
   const {
@@ -13,8 +16,13 @@ const createFilmTemplate = (film) => {
     favorite,
   } = userDetails;
 
+  const runtimeHours = Math.floor(info.runtime / 60);
+  const runtimeMinutes = info.runtime % 60;
+  const description = info.description.length > 140 ? info.description.slice(0, DESCRIPTION_MAX) + ELLIPSIS_CHAR : info.description;
   const releaseYear = new Date(info.release.date).getFullYear();
-  const activeClass = `film-card__controls-item--active`;
+  const watchlistActiveClass = watchlist ? ACTIVE_CLASS : ``;
+  const alreadyWatchedActiveClass = alreadyWatched ? ACTIVE_CLASS : ``;
+  const favoriteActiveClass = favorite ? ACTIVE_CLASS : ``;
 
   return (
     `<article class="film-card">
@@ -22,19 +30,41 @@ const createFilmTemplate = (film) => {
       <p class="film-card__rating">${info.totalRating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${releaseYear}</span>
-        <span class="film-card__duration">${Math.floor(info.runtime / 60)}h ${info.runtime % 60}m</span>
+        <span class="film-card__duration">${runtimeHours}h ${runtimeMinutes}m</span>
         <span class="film-card__genre">${info.genre.join(` `)}</span>
       </p>
       <img src="./images/posters/${info.poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${info.description.length > 140 ? info.description.slice(0, DESCRIPTION_MAX) + ELLIPSIS_CHAR : info.description}</p>
+      <p class="film-card__description">${description}</p>
       <a class="film-card__comments">${comments.length} comments</a>
       <form class="film-card__controls">
-        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchlist ? activeClass : ``}">Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${alreadyWatched ? activeClass : ``}">Mark as watched</button>
-        <button class="film-card__controls-item button film-card__controls-item--favorite ${favorite ? activeClass : ``}">Mark as favorite</button>
+        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchlistActiveClass}">Add to watchlist</button>
+        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${alreadyWatchedActiveClass}">Mark as watched</button>
+        <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteActiveClass}">Mark as favorite</button>
       </form>
     </article>`
   );
 };
 
-export {createFilmTemplate};
+export default class Film {
+  constructor(film) {
+    this._film = film;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
