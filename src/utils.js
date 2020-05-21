@@ -1,5 +1,10 @@
 import {MONTH_NAMES} from './const';
 
+const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
 const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min));
 };
@@ -36,8 +41,29 @@ const formatTime = (date, format) => {
   return formattedDate;
 };
 
-const render = (container, template, place = `beforeend`) => {
-  return container.insertAdjacentHTML(place, template);
+const render = (container, component, place = RenderPosition.BEFOREEND) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(component.getElement());
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(component.getElement());
+      break;
+  }
 };
 
-export {getRandomIntegerNumber, getRandomArrayItem, formatTime, render};
+const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+export {
+  getRandomIntegerNumber,
+  getRandomArrayItem,
+  formatTime,
+  render,
+  createElement,
+  RenderPosition,
+};
