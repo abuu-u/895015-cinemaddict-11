@@ -1,25 +1,13 @@
-import {createElement} from "../utils";
+import AbstractComponent from "./abstract-component";
 
-export default class MoviesInside {
+export default class MoviesInside extends AbstractComponent {
   constructor(moviesInside) {
-    this._moviesInside = moviesInside;
+    super();
 
-    this._element = null;
+    this._moviesInside = moviesInside;
   }
 
   getTemplate() {
     return `<p>${this._moviesInside} movies inside</p>`;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
