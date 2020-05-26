@@ -1,14 +1,14 @@
-import {createElement} from "../utils";
+import AbstractComponent from "./abstract-component";
 
 const DESCRIPTION_MAX = 140;
 const ELLIPSIS_CHAR = `…`;
 const ACTIVE_CLASS = `film-card__controls-item--active`;
 
-export default class Film {
+export default class Film extends AbstractComponent {
   constructor(film) {
-    this._film = film;
+    super();
 
-    this._element = null;
+    this._film = film;
   }
 
   getTemplate() {
@@ -52,15 +52,15 @@ export default class Film {
     );
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  setTitleClickHandler(cb) {
+    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, cb);
   }
 
-  removeElement() {
-    this._element = null;
+  setPosterClickHandler(cb) {
+    this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, cb);
+  }
+
+  setCommentsClickHandler(cb) {
+    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, cb);
   }
 }

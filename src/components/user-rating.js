@@ -1,4 +1,4 @@
-import {createElement} from "../utils";
+import AbstractComponent from "./abstract-component";
 
 const USER_RATINGS = [
   `novice`,
@@ -6,19 +6,19 @@ const USER_RATINGS = [
   `movie buff`,
 ];
 
-const getUserRating = (watchedFilms) => {
-  return watchedFilms ? USER_RATINGS[Math.floor(watchedFilms / 10)] : ``;
-};
-
-export default class UserRating {
+export default class UserRating extends AbstractComponent {
   constructor(watchedFilms) {
-    this._watchedFilms = watchedFilms;
+    super();
 
-    this._element = null;
+    this._watchedFilms = watchedFilms;
+  }
+
+  getUserRating() {
+    return this._watchedFilms ? USER_RATINGS[Math.floor(this._watchedFilms / 10)] : ``;
   }
 
   getTemplate() {
-    const rating = getUserRating(this._watchedFilms);
+    const rating = this.getUserRating();
 
     return (
       `<section class="header__profile profile">
@@ -26,17 +26,5 @@ export default class UserRating {
       <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
     </section>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

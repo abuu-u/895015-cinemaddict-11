@@ -1,11 +1,26 @@
+import AbstractComponent from "./abstract-component";
 
-import {createElement} from "../utils";
+const getFiltersValues = (films) => {
+  let filterValues = {
+    watchlist: 0,
+    alreadyWatched: 0,
+    favorite: 0,
+  };
 
-export default class Filters {
-  constructor(filtersValues) {
-    this._filtersValues = filtersValues;
+  films.forEach((film) => {
+    for (const [key, value] of Object.entries(film.userDetails)) {
+      filterValues[key] += value ? 1 : 0;
+    }
+  });
 
-    this._element = null;
+  return filterValues;
+};
+
+export default class Filters extends AbstractComponent {
+  constructor(films) {
+    super();
+
+    this._filters = getFiltersValues(films);
   }
 
   getTemplate() {
@@ -13,7 +28,7 @@ export default class Filters {
       watchlist,
       alreadyWatched,
       favorite,
-    } = this._filtersValues;
+    } = this._filters;
 
     return (
       `<nav class="main-navigation">
@@ -28,15 +43,15 @@ export default class Filters {
     );
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
+  updateFilters(films) {
+    const {
+      watchlist,
+      alreadyWatched,
+      favorite,
+    } = getFiltersValues(films);
 
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    this.getElement().querySelector(`a[href='#watchlist'] > span`).textContent = watchlist;
+    this.getElement().querySelector(`a[href='#history'] > span`).textContent = alreadyWatched;
+    this.getElement().querySelector(`a[href='#favorites'] > span`).textContent = favorite;
   }
 }

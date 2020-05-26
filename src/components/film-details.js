@@ -1,19 +1,27 @@
-import {formatTime, createElement} from '../utils';
+import {formatTime} from '../utils/common';
+import AbstractComponent from "./abstract-component";
 
 const commentDateFormat = `YYYY/MM/DD HH:mm`;
 const releaseDateFormat = `DD MMMM YYYY`;
 
-const createComments = (comment) => {
-  const {
-    author,
-    text,
-    emotion,
-  } = comment;
+export default class FilmDetails extends AbstractComponent {
+  constructor(film) {
+    super();
 
-  const date = formatTime(new Date(comment.date), commentDateFormat);
+    this._film = film;
+  }
 
-  return (
-    `<li class="film-details__comment">
+  createComments(comment) {
+    const {
+      author,
+      text,
+      emotion,
+    } = comment;
+
+    const date = formatTime(new Date(comment.date), commentDateFormat);
+
+    return (
+      `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
       </span>
@@ -26,14 +34,7 @@ const createComments = (comment) => {
         </p>
       </div>
     </li>`
-  );
-};
-
-export default class FilmDetails {
-  constructor(film) {
-    this._film = film;
-
-    this._element = null;
+    );
   }
 
   getTemplate() {
@@ -57,7 +58,7 @@ export default class FilmDetails {
     const watchlistChecked = watchlist ? `checked` : ``;
     const alreadyWatchedChecked = alreadyWatched ? `checked` : ``;
     const favoriteChecked = favorite ? `checked` : ``;
-    const comments = this._film.comments.map(createComments);
+    const comments = this._film.comments.map(this.createComments);
 
     return (
       `<section class="film-details">
@@ -183,15 +184,7 @@ export default class FilmDetails {
     );
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setCloseClickHandler(cb) {
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, cb);
   }
 }

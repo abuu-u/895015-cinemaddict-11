@@ -1,4 +1,4 @@
-import {getRandomIntegerNumber} from '../utils';
+import {getRandomIntegerNumber} from '../utils/common';
 
 const generateDescription = (text, count) => {
   const sentences = text.split(`. `);

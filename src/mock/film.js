@@ -1,7 +1,6 @@
 import {generateComments} from './comment';
 import {generateDescription} from './description';
-import {getRandomIntegerNumber} from '../utils';
-import {getRandomArrayItem} from '../utils';
+import {getRandomIntegerNumber, getRandomArrayItem} from '../utils/common';
 
 const posters = [
   `made-for-each-other.png`,

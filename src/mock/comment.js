@@ -1,4 +1,4 @@
-import {getRandomArrayItem} from '../utils';
+import {getRandomArrayItem} from '../utils/common';
 
 const author = `Ilya O'Reilly`;
 const text = `a film that changed my life, a true masterpiece, post-credit scene was just amazing omg.`;
