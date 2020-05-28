@@ -1,7 +1,7 @@
 import AbstractComponent from "./abstract-component";
 
 const getFiltersValues = (films) => {
-  let filterValues = {
+  const filterValues = {
     watchlist: 0,
     alreadyWatched: 0,
     favorite: 0,

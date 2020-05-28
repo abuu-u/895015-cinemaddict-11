@@ -48,7 +48,7 @@ const generateFilm = () => {
         `Morgan Freeman`,
       ],
       release: {
-        date: `2019-05-11T00:00:00.000Z`,
+        date: `201${Math.floor(Math.random() * 9)}-05-11T00:00:00.000Z`,
         country: `Finland`,
       },
       runtime: getRandomIntegerNumber(Runtime.MIN, Runtime.MAX),
