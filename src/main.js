@@ -13,6 +13,6 @@ const films = generateFilms(FILMS_COUNT);
 
 render(siteHeaderElement, new UserRatingComponent(generateWatchedFilms()));
 
-const mainController = new PageController(siteMainElement);
+const pageController = new PageController(siteMainElement);
 
-mainController.render(films);
+pageController.render(films);
