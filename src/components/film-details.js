@@ -1,10 +1,8 @@
 import {formatTime} from '../utils/common';
 import AbstractSmartComponent from "./abstract-smart-component";
+import {DateFormat} from '../const';
 
 const EMOJIS = [`smile`, `sleeping`, `puke`, `angry`];
-
-const commentDateFormat = `YYYY/MM/DD HH:mm`;
-const releaseDateFormat = `DD MMMM YYYY`;
 
 export default class FilmDetails extends AbstractSmartComponent {
   constructor(film) {
@@ -21,7 +19,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       emotion,
     } = comment;
 
-    const date = formatTime(new Date(comment.date), commentDateFormat);
+    const date = formatTime(new Date(comment.date), DateFormat.comment);
 
     return (
       `<li class="film-details__comment">
@@ -82,7 +80,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       favorite,
     } = userDetails;
 
-    const date = formatTime(new Date(info.release.date), releaseDateFormat);
+    const date = formatTime(new Date(info.release.date), DateFormat.release);
     const runtimeHours = Math.floor(info.runtime / 60);
     const runtimeMinutes = info.runtime % 60;
     const genre = info.genre.length > 1 ? `s` : ``;

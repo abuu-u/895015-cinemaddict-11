@@ -1,4 +1,5 @@
 import moment from "moment";
+import {DateFormat} from '../const';
 
 const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min));
@@ -11,7 +12,16 @@ const getRandomArrayItem = (array) => {
 };
 
 const formatTime = (date, format) => {
-  return moment(date).format(format);
+  const formattedDate = ``;
+
+  switch (format) {
+    case DateFormat.comment:
+      return moment.duration(date - new Date()).humanize(true);
+    case DateFormat.release:
+      return moment(date).format(format);
+  }
+
+  return formattedDate;
 };
 
 export {
