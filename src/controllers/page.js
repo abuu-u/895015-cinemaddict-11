@@ -8,16 +8,6 @@ import {render, remove} from '../utils/render';
 const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
 
-const renderFilms = (filmListElement, films, onDataChange, onViewChange) => {
-  return films.map((film) => {
-    const filmController = new FilmController(filmListElement, onDataChange, onViewChange);
-
-    filmController.render(film);
-
-    return filmController;
-  });
-};
-
 const getSortedFilms = (films, sortType) => {
   let sortedTasks = [];
   const showingTasks = films.slice();
@@ -78,7 +68,7 @@ export default class PageController {
     const filmsListContainerElement = this._filmsContainerComponent.getFilmsListContainerElement();
     const filmsListElement = this._filmsContainerComponent.getFilmsListElement();
 
-    let newFilms = renderFilms(filmsListContainerElement, showingFilmsOnStart, this._onDataChange, this._onViewChange);
+    let newFilms = this._renderFilms(filmsListContainerElement, showingFilmsOnStart, this._onDataChange, this._onViewChange);
     this._showedFilmControllers = this._showedFilmControllers.concat(newFilms);
 
     render(filmsListElement, this._showMoreButtonComponent);
@@ -87,7 +77,7 @@ export default class PageController {
       const prevTasksCount = showingFilmsCount;
       showingFilmsCount = showingFilmsCount + SHOWING_FILMS_COUNT_BY_BUTTON;
 
-      newFilms = renderFilms(filmsListContainerElement, this._sortedFilms.slice(prevTasksCount, showingFilmsCount), this._onDataChange, this._onViewChange);
+      newFilms = this._renderFilms(filmsListContainerElement, this._sortedFilms.slice(prevTasksCount, showingFilmsCount), this._onDataChange, this._onViewChange);
       this._showedFilmControllers = this._showedFilmControllers.concat(newFilms);
 
       this._filtersComponent.updateFilters(this._sortedFilms.slice(0, showingFilmsCount));
@@ -98,6 +88,16 @@ export default class PageController {
     });
 
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+  }
+
+  _renderFilms(filmListElement, films) {
+    return films.map((film) => {
+      const filmController = new FilmController(filmListElement, this._onDataChange, this._onViewChange);
+
+      filmController.render(film);
+
+      return filmController;
+    });
   }
 
   _onViewChange() {

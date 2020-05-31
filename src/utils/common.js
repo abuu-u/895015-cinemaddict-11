@@ -1,4 +1,4 @@
-import {MONTH_NAMES} from '../const';
+import moment from "moment";
 
 const getRandomIntegerNumber = (min, max) => {
   return min + Math.floor(Math.random() * (max - min));
@@ -10,30 +10,8 @@ const getRandomArrayItem = (array) => {
   return array[randomIndex];
 };
 
-const castTimeFormat = (value) => {
-  return value < 10 ? `0${value}` : String(value);
-};
-
-const parseDate = (date) => {
-  return {
-    YYYY: date.getFullYear(),
-    MM: castTimeFormat(date.getMonth()),
-    MMMM: MONTH_NAMES[date.getMonth()],
-    DD: castTimeFormat(date.getDate()),
-    HH: castTimeFormat(date.getHours()),
-    mm: castTimeFormat(date.getMinutes()),
-  };
-};
-
 const formatTime = (date, format) => {
-  const parsedDate = parseDate(date);
-  let formattedDate = format;
-
-  for (const [key, value] of Object.entries(parsedDate)) {
-    formattedDate = formattedDate.replace(new RegExp(`\\b${key}\\b`), `${value}`);
-  }
-
-  return formattedDate;
+  return moment(date).format(format);
 };
 
 export {
