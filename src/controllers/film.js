@@ -10,10 +10,16 @@ const Emoji = {
   "emoji-angry": `angry`,
 };
 
+const Mode = {
+  DEFAULT: `default`,
+  DETAILS: `details`,
+};
 export default class FilmController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
+    this._mode = Mode.DEFAULT;
 
     this._film = null;
     this._filmComponent = null;
@@ -57,23 +63,38 @@ export default class FilmController {
     }
   }
 
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._removeFilmDetails();
+    }
+  }
+
   _renderFilmDetails() {
+    this._onViewChange();
     document.body.appendChild(this._filmDetailsComponent.getElement());
     document.addEventListener(`keydown`, this._onFilmDetailsPressEsc);
+    this._mode = Mode.DETAILS;
   }
 
   _removeFilmDetails() {
     document.body.removeChild(this._filmDetailsComponent.getElement());
     document.removeEventListener(`keydown`, this._onFilmDetailsPressEsc);
+    this._mode = Mode.DEFAULT;
   }
 
   _onFilmDetailsCloseClick() {
     this._removeFilmDetails();
+
+    this._filmDetailsComponent.setEmoji(null);
+    this._filmDetailsComponent.rerender();
   }
 
   _onFilmDetailsPressEsc(evt) {
     if (evt.key === ESC_KEY) {
       this._removeFilmDetails();
+
+      this._filmDetailsComponent.setEmoji(null);
+      this._filmDetailsComponent.rerender();
     }
   }
 
