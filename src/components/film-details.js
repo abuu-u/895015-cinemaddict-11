@@ -1,14 +1,15 @@
 import {formatTime} from '../utils/common';
-import AbstractComponent from "./abstract-component";
+import AbstractSmartComponent from "./abstract-smart-component";
 
 const commentDateFormat = `YYYY/MM/DD HH:mm`;
 const releaseDateFormat = `DD MMMM YYYY`;
 
-export default class FilmDetails extends AbstractComponent {
+export default class FilmDetails extends AbstractSmartComponent {
   constructor(film) {
     super();
 
     this._film = film;
+    this._emoji = null;
   }
 
   createComments(comment) {
@@ -59,6 +60,10 @@ export default class FilmDetails extends AbstractComponent {
     const alreadyWatchedChecked = alreadyWatched ? `checked` : ``;
     const favoriteChecked = favorite ? `checked` : ``;
     const comments = this._film.comments.map(this.createComments);
+    const emojiSmileChecked = this._emoji === `smile` ? `checked` : ``;
+    const emojiSleepingChecked = this._emoji === `sleeping` ? `checked` : ``;
+    const emojiPukeChecked = this._emoji === `puke` ? `checked` : ``;
+    const emojiAngryChecked = this._emoji === `angry` ? `checked` : ``;
 
     return (
       `<section class="film-details">
@@ -149,29 +154,31 @@ export default class FilmDetails extends AbstractComponent {
             </ul>
 
             <div class="film-details__new-comment">
-              <div for="add-emoji" class="film-details__add-emoji-label"></div>
+              <div for="add-emoji" class="film-details__add-emoji-label">
+                ${this._emoji ? `<img src="images/emoji/${this._emoji}.png" width="55" height="55" alt="emoji-${this._emoji}">` : ``}
+              </div>
 
               <label class="film-details__comment-label">
                 <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
               </label>
 
               <div class="film-details__emoji-list">
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
+                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${emojiSmileChecked}>
                 <label class="film-details__emoji-label" for="emoji-smile">
                   <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
                 </label>
 
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
+                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${emojiSleepingChecked}>
                 <label class="film-details__emoji-label" for="emoji-sleeping">
                   <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
                 </label>
 
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
+                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${emojiPukeChecked}>
                 <label class="film-details__emoji-label" for="emoji-puke">
                   <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
                 </label>
 
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
+                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${emojiAngryChecked}>
                 <label class="film-details__emoji-label" for="emoji-angry">
                   <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
                 </label>
@@ -184,7 +191,27 @@ export default class FilmDetails extends AbstractComponent {
     );
   }
 
-  setCloseClickHandler(cb) {
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, cb);
+  setEmoji(emoji) {
+    this._emoji = emoji;
+  }
+
+  setCloseClickHandler(handler) {
+    this.setHandler(`.film-details__close-btn`, `click`, handler);
+  }
+
+  setAddToWatchlistButtonClickHandler(handler) {
+    this.setHandler(`.film-details__control-label--watchlist`, `click`, handler);
+  }
+
+  setAlreadyWatchedButtonClickHandler(handler) {
+    this.setHandler(`.film-details__control-label--watched`, `click`, handler);
+  }
+
+  setAddToFavoritesButtonClickHandler(handler) {
+    this.setHandler(`.film-details__control-label--favorite`, `click`, handler);
+  }
+
+  setEmojiChangeHandler(handler) {
+    this.setHandler(`.film-details__emoji-list`, `change`, handler);
   }
 }

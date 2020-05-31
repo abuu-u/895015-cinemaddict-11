@@ -1,10 +1,10 @@
-import AbstractComponent from "./abstract-component";
+import AbstractSmartComponent from "./abstract-smart-component";
 
 const DESCRIPTION_MAX = 140;
 const ELLIPSIS_CHAR = `…`;
 const ACTIVE_CLASS = `film-card__controls-item--active`;
 
-export default class Film extends AbstractComponent {
+export default class Film extends AbstractSmartComponent {
   constructor(film) {
     super();
 
@@ -52,15 +52,27 @@ export default class Film extends AbstractComponent {
     );
   }
 
-  setTitleClickHandler(cb) {
-    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, cb);
+  setTitleClickHandler(handler) {
+    this.setHandler(`.film-card__title`, `click`, handler);
   }
 
-  setPosterClickHandler(cb) {
-    this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, cb);
+  setPosterClickHandler(handler) {
+    this.setHandler(`.film-card__poster`, `click`, handler);
   }
 
-  setCommentsClickHandler(cb) {
-    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, cb);
+  setCommentsClickHandler(handler) {
+    this.setHandler(`.film-card__comments`, `click`, handler);
+  }
+
+  setAddToWatchlistButtonClickHandler(handler) {
+    this.setHandler(`.film-card__controls-item--add-to-watchlist`, `click`, handler);
+  }
+
+  setAlreadyWatchedButtonClickHandler(handler) {
+    this.setHandler(`.film-card__controls-item--mark-as-watched`, `click`, handler);
+  }
+
+  setAddToFavoritesButtonClickHandler(handler) {
+    this.setHandler(`.film-card__controls-item--favorite`, `click`, handler);
   }
 }

@@ -12,4 +12,12 @@ export default class FilmsContainer extends AbstractComponent {
     </section>`
     );
   }
+
+  getFilmsListElement() {
+    return this.getElement().querySelector(`.films-list`);
+  }
+
+  getFilmsListContainerElement() {
+    return this.getFilmsListElement().querySelector(`.films-list__container`);
+  }
 }
