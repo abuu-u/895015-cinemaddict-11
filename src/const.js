@@ -1,21 +1,11 @@
-const MONTH_NAMES = [
-  `January`,
-  `February`,
-  `March`,
-  `April`,
-  `May`,
-  `June`,
-  `July`,
-  `August`,
-  `September`,
-  `October`,
-  `November`,
-  `December`,
-];
-
 const ESC_KEY = `Escape`;
 
+const DateFormat = {
+  comment: `YYYY/MM/DD HH:mm`,
+  release: `DD MMMM YYYY`,
+};
+
 export {
-  MONTH_NAMES,
   ESC_KEY,
+  DateFormat,
 };

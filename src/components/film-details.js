@@ -1,8 +1,8 @@
 import {formatTime} from '../utils/common';
 import AbstractSmartComponent from "./abstract-smart-component";
+import {DateFormat} from '../const';
 
-const commentDateFormat = `YYYY/MM/DD HH:mm`;
-const releaseDateFormat = `DD MMMM YYYY`;
+const EMOJIS = [`smile`, `sleeping`, `puke`, `angry`];
 
 export default class FilmDetails extends AbstractSmartComponent {
   constructor(film) {
@@ -19,7 +19,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       emotion,
     } = comment;
 
-    const date = formatTime(new Date(comment.date), commentDateFormat);
+    const date = formatTime(new Date(comment.date), DateFormat.comment);
 
     return (
       `<li class="film-details__comment">
@@ -39,11 +39,6 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   createNewComment() {
-    const emojiSmileChecked = this._emoji === `smile` ? `checked` : ``;
-    const emojiSleepingChecked = this._emoji === `sleeping` ? `checked` : ``;
-    const emojiPukeChecked = this._emoji === `puke` ? `checked` : ``;
-    const emojiAngryChecked = this._emoji === `angry` ? `checked` : ``;
-
     return (
       `<div class="film-details__new-comment">
         <div for="add-emoji" class="film-details__add-emoji-label">
@@ -55,25 +50,17 @@ export default class FilmDetails extends AbstractSmartComponent {
         </label>
 
         <div class="film-details__emoji-list">
-          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${emojiSmileChecked}>
-          <label class="film-details__emoji-label" for="emoji-smile">
-            <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-          </label>
-
-          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${emojiSleepingChecked}>
-          <label class="film-details__emoji-label" for="emoji-sleeping">
-            <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-          </label>
-
-          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${emojiPukeChecked}>
-          <label class="film-details__emoji-label" for="emoji-puke">
-            <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-          </label>
-
-          <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${emojiAngryChecked}>
-          <label class="film-details__emoji-label" for="emoji-angry">
-            <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-          </label>
+        ${EMOJIS.map((emoji) => {
+        return (
+          `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio"
+            id="emoji-${emoji}"
+            value="${emoji}"
+            ${this._emoji === emoji ? `checked` : ``}>
+            <label class="film-details__emoji-label" for="emoji-${emoji}">
+            <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="emoji">
+          </label>`
+        );
+      }).join(`\n`)}
         </div>
       </div>`
     );
@@ -93,7 +80,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       favorite,
     } = userDetails;
 
-    const date = formatTime(new Date(info.release.date), releaseDateFormat);
+    const date = formatTime(new Date(info.release.date), DateFormat.release);
     const runtimeHours = Math.floor(info.runtime / 60);
     const runtimeMinutes = info.runtime % 60;
     const genre = info.genre.length > 1 ? `s` : ``;
@@ -197,16 +184,6 @@ export default class FilmDetails extends AbstractSmartComponent {
       </form>
     </section>`
     );
-  }
-
-  reset() {
-    const film = this._film;
-
-    this._isDateShowing = !!film.dueDate;
-    this._isRepeatingfilm = Object.values(film.repeatingDays).some(Boolean);
-    this._activeRepeatingDays = Object.assign({}, film.repeatingDays);
-
-    this.rerender();
   }
 
   setEmoji(emoji) {
