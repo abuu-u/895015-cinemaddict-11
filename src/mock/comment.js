@@ -7,6 +7,7 @@ const emotions = [`smile`, `sleeping`, `puke`, `angry`];
 
 const generateComment = () => {
   return {
+    id: String(new Date() + Math.random()),
     author,
     text,
     date,

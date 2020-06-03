@@ -1,7 +1,7 @@
 import FilmComponent from "../components/film";
 import FilmDetailsComponent from "../components/film-details";
 import {ESC_KEY} from "../const";
-import {render, replace} from "../utils/render";
+import {render, replace, remove} from "../utils/render";
 
 const Emoji = {
   "emoji-smile": `smile`,
@@ -15,15 +15,17 @@ const Mode = {
   DETAILS: `details`,
 };
 export default class FilmController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange, onViewChange, filmsModel) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._mode = Mode.DEFAULT;
+    this._filmsModel = filmsModel;
 
     this._film = null;
     this._filmComponent = null;
     this._filmDetailsComponent = null;
+    this._filmId = null;
 
     this._renderFilmDetails = this._renderFilmDetails.bind(this);
     this._onFilmDetailsCloseClick = this._onFilmDetailsCloseClick.bind(this);
@@ -32,6 +34,8 @@ export default class FilmController {
     this._onAlreadyWatchedClick = this._onAlreadyWatchedClick.bind(this);
     this._onFavoriteClick = this._onFavoriteClick.bind(this);
     this._onEmojiChange = this._onEmojiChange.bind(this);
+    this._onCommentDeleteClick = this._onCommentDeleteClick.bind(this);
+    this._onFilmDetailsCtrlEnterPress = this._onFilmDetailsCtrlEnterPress.bind(this);
   }
 
   render(film) {
@@ -41,6 +45,7 @@ export default class FilmController {
     this._film = film;
     this._filmComponent = new FilmComponent(this._film);
     this._filmDetailsComponent = new FilmDetailsComponent(this._film);
+    this._filmId = this._filmComponent.getElement().dataset.id;
 
     this._filmComponent.setTitleClickHandler(this._renderFilmDetails);
     this._filmComponent.setPosterClickHandler(this._renderFilmDetails);
@@ -54,6 +59,10 @@ export default class FilmController {
     this._filmDetailsComponent.setAlreadyWatchedButtonClickHandler(this._onAlreadyWatchedClick);
     this._filmDetailsComponent.setAddToFavoritesButtonClickHandler(this._onFavoriteClick);
     this._filmDetailsComponent.setEmojiChangeHandler(this._onEmojiChange);
+    this._filmDetailsComponent.setCommentDeleteClickHandler(this._onCommentDeleteClick);
+    this._filmDetailsComponent.setSubmitHandler(this._onFormSubmit);
+
+    document.addEventListener(`keydown`, this._onFilmDetailsCtrlEnterPress);
 
     if (oldFilmDetailsComponent && oldFilmComponent) {
       replace(this._filmComponent, oldFilmComponent);
@@ -61,6 +70,12 @@ export default class FilmController {
     } else {
       render(this._container, this._filmComponent);
     }
+  }
+
+  destroy() {
+    remove(this._filmDetailsComponent);
+    remove(this._filmComponent);
+    document.removeEventListener(`keydown`, this._onFilmDetailsPressEsc);
   }
 
   setDefaultView() {
@@ -99,7 +114,7 @@ export default class FilmController {
   }
 
   _changeData(object, key) {
-    this._onDataChange(object, Object.assign({}, object, {
+    this._onDataChange(this, object, Object.assign({}, object, {
       userDetails: Object.assign({}, object.userDetails, {
         [`${key}`]: !object.userDetails[key],
       })
@@ -130,6 +145,26 @@ export default class FilmController {
   _onEmojiChange(evt) {
     if (evt.target.tagName === `INPUT`) {
       this._filmDetailsComponent.setEmoji(Emoji[evt.target.id]);
+      this._filmDetailsComponent.rerender();
+    }
+  }
+
+  _onCommentDeleteClick(evt) {
+    evt.preventDefault();
+
+    if (evt.target.tagName === `BUTTON`) {
+      this._filmsModel.removeComment(this._filmId, evt.target.dataset.id);
+      this._filmDetailsComponent.rerender();
+    }
+  }
+
+  _onFilmDetailsCtrlEnterPress(evt) {
+    if (!document.contains(this._filmDetailsComponent.getElement())) {
+      return;
+    }
+
+    if ((evt.ctrlKey || evt.metaKey) && evt.key === `Enter`) {
+      this._filmsModel.addComment(this._filmId, this._filmDetailsComponent.getData());
       this._filmDetailsComponent.rerender();
     }
   }

@@ -1,6 +1,7 @@
 import {formatTime} from '../utils/common';
 import AbstractSmartComponent from "./abstract-smart-component";
 import {DateFormat} from '../const';
+import {encode} from "he";
 
 const EMOJIS = [`smile`, `sleeping`, `puke`, `angry`];
 
@@ -14,6 +15,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   createComments(comment) {
     const {
+      id,
       author,
       text,
       emotion,
@@ -31,7 +33,7 @@ export default class FilmDetails extends AbstractSmartComponent {
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${date}</span>
-          <button class="film-details__comment-delete">Delete</button>
+          <button class="film-details__comment-delete" data-id="${id}">Delete</button>
         </p>
       </div>
     </li>`
@@ -208,5 +210,30 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   setEmojiChangeHandler(handler) {
     this.setHandler(`.film-details__emoji-list`, `change`, handler);
+  }
+
+  setCommentDeleteClickHandler(handler) {
+    this.setHandler(`.film-details__comments-list`, `click`, handler);
+  }
+
+  setSubmitHandler(handler) {
+    this.setHandler(`form`, `submit`, handler);
+  }
+
+  getForm() {
+    return this.getElement().querySelector(`form`);
+  }
+
+  getData() {
+    const form = this.getElement().querySelector(`.film-details__inner`);
+    const formData = new FormData(form);
+
+    return {
+      id: String(new Date() + Math.random()),
+      author: `qq`,
+      text: encode(formData.get(`comment`)),
+      date: new Date(),
+      emotion: formData.get(`comment-emoji`),
+    };
   }
 }
