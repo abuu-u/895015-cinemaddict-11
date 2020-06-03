@@ -33,6 +33,7 @@ const Runtime = {
 
 const generateFilm = () => {
   return {
+    id: String(new Date() + Math.random()),
     comments: generateComments(getRandomIntegerNumber(Comment.MIN, Comment.MAX)),
     info: {
       title: `Made for Each Other`,

@@ -1,35 +1,38 @@
 import AbstractComponent from "./abstract-component";
 
-const SortType = {
-  DEFAULT: `default`,
-  BY_DATE: `by-date`,
-  BY_RATING: `by-rating`,
-};
-
 const ACTIVE_CLASS = `sort__button--active`;
 
+const SortText = {
+  "default": `Sort by default`,
+  "by-date": `Sort by date`,
+  "by-rating": `Sort by rating`,
+};
+
+
 export default class Sort extends AbstractComponent {
-  constructor() {
+  constructor(sorts) {
     super();
 
-    this._currenSortType = SortType.DEFAULT;
+    this._sorts = sorts;
   }
 
   getTemplate() {
-    const defaultActiveClass = this._currenSortType === SortType.DEFAULT ? ACTIVE_CLASS : ``;
-    const byDatetActiveClass = this._currenSortType === SortType.BY_DATE ? ACTIVE_CLASS : ``;
-    const byRatingActiveClass = this._currenSortType === SortType.BY_RATING ? ACTIVE_CLASS : ``;
-
     return (
       `<ul class="sort">
-      <li><a href="#" data-sort-type="${SortType.DEFAULT}" class="sort__button ${defaultActiveClass}">Sort by default</a></li>
-      <li><a href="#" data-sort-type="${SortType.BY_DATE}" class="sort__button ${byDatetActiveClass}">Sort by date</a></li>
-      <li><a href="#" data-sort-type="${SortType.BY_RATING}" class="sort__button ${byRatingActiveClass}">Sort by rating</a></li>
+        ${this._sorts.map((sort) => {
+        return (
+          `<li>
+            <a href="#" data-sort-type="${sort.name}"
+            class="sort__button ${sort.checked ? ACTIVE_CLASS : ``}">
+            ${SortText[sort.name]}</a>
+          </li>`
+        );
+      }).join(`\n`)}
     </ul>`
     );
   }
 
-  setSortTypeChangeHandler(handler) {
+  setSortChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
@@ -49,5 +52,3 @@ export default class Sort extends AbstractComponent {
     });
   }
 }
-
-export {SortType};

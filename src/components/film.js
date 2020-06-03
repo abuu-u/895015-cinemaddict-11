@@ -13,6 +13,7 @@ export default class Film extends AbstractSmartComponent {
 
   getTemplate() {
     const {
+      id,
       comments,
       info,
       userDetails,
@@ -32,7 +33,7 @@ export default class Film extends AbstractSmartComponent {
     const favoriteActiveClass = favorite ? ACTIVE_CLASS : ``;
 
     return (
-      `<article class="film-card">
+      `<article class="film-card" data-id="${id}">
       <h3 class="film-card__title">${info.title}</h3>
       <p class="film-card__rating">${info.totalRating}</p>
       <p class="film-card__info">
