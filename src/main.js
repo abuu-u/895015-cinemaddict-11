@@ -6,6 +6,7 @@ import PageController from './controllers/page';
 import FilmsModel from './models/films';
 import FilterController from "./controllers/filter.js";
 import SortController from "./controllers/sort.js";
+import StatisticsController from './controllers/statistics';
 
 const FILMS_COUNT = 19;
 
@@ -18,12 +19,18 @@ filmsModel.setFilms(films);
 
 render(siteHeaderElement, new UserRatingComponent(generateWatchedFilms()));
 
-const filterController = new FilterController(siteMainElement, filmsModel);
-filterController.render();
+const statisticsController = new StatisticsController(siteMainElement, filmsModel);
 
 const sortController = new SortController(siteMainElement, filmsModel);
+
+const pageController = new PageController(siteMainElement, filmsModel, statisticsController, sortController);
+
+const filterController = new FilterController(siteMainElement, filmsModel, pageController, statisticsController);
+
+filterController.render();
+
 sortController.render();
 
-const pageController = new PageController(siteMainElement, filmsModel);
+statisticsController.render();
 
 pageController.render();

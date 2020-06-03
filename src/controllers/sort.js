@@ -36,6 +36,17 @@ export default class SortController {
     }
   }
 
+  show() {
+    this._sortComponent.show();
+  }
+
+  hide() {
+    this._filmsModel.setSort(SortType.DEFAULT);
+    this._activeSortType = SortType.DEFAULT;
+    this.render();
+    this._sortComponent.hide();
+  }
+
   _onSortChange(sortType) {
     if (this._activeSortType === sortType) {
       return;

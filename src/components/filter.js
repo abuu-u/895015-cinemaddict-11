@@ -38,4 +38,12 @@ export default class Filters extends AbstractComponent {
       }
     });
   }
+
+  setStatsClickHandler(handler) {
+    this.getElement().querySelector(`.main-navigation__additional`).addEventListener(`click`, (evt) => {
+      if (evt.target.tagName === `A`) {
+        handler();
+      }
+    });
+  }
 }

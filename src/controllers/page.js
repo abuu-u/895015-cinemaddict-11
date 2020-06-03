@@ -7,12 +7,14 @@ const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
 
 export default class PageController {
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, statisticsController, sortController) {
     this._container = container;
     this._filmsModel = filmsModel;
 
     this._showedFilmControllers = [];
     this._showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
+    this._statisticsController = statisticsController;
+    this._sortController = sortController;
     this._filmsContainerComponent = new FilmsContainerComponent();
     this._showMoreButtonComponent = new ShowMoreButtonComponent();
 
@@ -24,6 +26,18 @@ export default class PageController {
 
     this._filmsModel.setFilterChangeHandler(this._onFilterChange);
     this._filmsModel.setSortChangeHandler(this._onSortChange);
+  }
+
+  hide() {
+    this._filmsContainerComponent.hide();
+    this._filmsContainerComponent.hide();
+    this._sortController.hide();
+  }
+
+  show() {
+    this._filmsContainerComponent.show();
+    this._filmsContainerComponent.show();
+    this._sortController.show();
   }
 
   render() {
@@ -94,6 +108,7 @@ export default class PageController {
 
     if (isSuccess) {
       filmController.render(newData);
+      this._statisticsController.render();
     }
   }
 

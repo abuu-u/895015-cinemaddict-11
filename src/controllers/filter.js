@@ -4,15 +4,18 @@ import {render, replace} from "../utils/render.js";
 import {getFilmsByFilter} from "../utils/filter.js";
 
 export default class FilterController {
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, pageController, statisticsController) {
     this._container = container;
     this._filmsModel = filmsModel;
+    this._pageController = pageController;
+    this._statisticsController = statisticsController;
 
     this._activeFilterType = FilterType.ALL;
     this._filterComponent = null;
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
+    this._onStatsClick = this._onStatsClick.bind(this);
 
     this._filmsModel.setDataChangeHandler(this._onDataChange);
   }
@@ -31,6 +34,7 @@ export default class FilterController {
 
     this._filterComponent = new FilterComponent(filters);
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
+    this._filterComponent.setStatsClickHandler(this._onStatsClick);
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);
@@ -40,6 +44,9 @@ export default class FilterController {
   }
 
   _onFilterChange(filterType) {
+    this._pageController.show();
+    this._statisticsController.hide();
+
     if (this._activeFilterType === filterType) {
       return;
     }
@@ -47,6 +54,11 @@ export default class FilterController {
     this._filmsModel.setFilter(filterType);
     this._activeFilterType = filterType;
     this.render();
+  }
+
+  _onStatsClick() {
+    this._pageController.hide();
+    this._statisticsController.show();
   }
 
   _onDataChange() {
